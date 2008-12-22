@@ -20,7 +20,7 @@ module Jekyll
     #
     # Returns a string
     def raw_content
-      Dir.chdir(File.join(Jekyll.source, '_includes')) do
+      Dir.chdir(Jekyll.site.options['includes_path']) do
         choices = Dir['**/*'].reject { |x| File.symlink?(x) }
         if choices.include?(@file)
           File.read(@file)

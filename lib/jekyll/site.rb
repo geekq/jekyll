@@ -3,6 +3,7 @@ module Jekyll
   class Site
     attr_accessor :source, :dest
     attr_accessor :layouts, :posts
+    attr_accessor :options
     
     # Initialize the site
     #   +source+ is String path to the source directory containing
@@ -16,6 +17,15 @@ module Jekyll
       self.dest = dest
       self.layouts = {}
       self.posts = []
+      self.options = {}
+
+      config_file_path = File.join(self.source, '.jekyllrc')
+      if File.exists?(config_file_path)
+        self.options = YAML.load(File.read(config_file_path))
+      end
+      
+      self.options['layouts_path']  ||= File.join(self.source, '_layouts')
+      self.options['includes_path'] ||= File.join(self.source, '_includes')
     end
     
     # Do the actual work of processing the site and generating the
@@ -33,7 +43,7 @@ module Jekyll
     #
     # Returns nothing
     def read_layouts
-      base = File.join(self.source, "_layouts")
+      base = options['layouts_path']
       entries = Dir.entries(base)
       entries = entries.reject { |e| File.directory?(File.join(base, e)) }
       

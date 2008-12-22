@@ -46,7 +46,7 @@ module Jekyll
   VERSION = '0.2.1'
   
   class << self
-    attr_accessor :source, :dest, :lsi, :pygments, :markdown_proc
+    attr_accessor :source, :dest, :site, :lsi, :pygments, :markdown_proc
   end
   
   Jekyll.lsi = false
@@ -58,6 +58,7 @@ module Jekyll
     
     Jekyll.source = source
     Jekyll.dest = dest
-    Jekyll::Site.new(source, dest).process
+    Jekyll.site = Jekyll::Site.new(source, dest)
+    Jekyll.site.process
   end
 end
