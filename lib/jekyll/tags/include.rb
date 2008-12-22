@@ -9,15 +9,8 @@ module Jekyll
     def render(context)
       if @file !~ /^[a-zA-Z0-9_\/\.-]+$/ || @file =~ /\.\// || @file =~ /\/\./
         return "Include file '#{@file}' contains invalid characters or sequences"
-      end
-      
-      Dir.chdir(File.join(Jekyll.source, '_includes')) do
-        choices = Dir['**/*'].reject { |x| File.symlink?(x) }
-        if choices.include?(@file)
-          File.read(@file)
-        else
-          "Included file '#{@file}' not found in _includes directory"
-        end
+      else
+        return Jekyll::Include.new(@file).content
       end
     end
   end

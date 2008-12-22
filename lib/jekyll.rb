@@ -38,6 +38,7 @@ require 'jekyll/page'
 require 'jekyll/post'
 require 'jekyll/filters'
 require 'jekyll/tags/highlight'
+require 'jekyll/include'
 require 'jekyll/tags/include'
 require 'jekyll/albino'
 

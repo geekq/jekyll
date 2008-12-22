@@ -10,6 +10,7 @@ lib/jekyll/converters/csv.rb
 lib/jekyll/converters/mephisto.rb
 lib/jekyll/convertible.rb
 lib/jekyll/filters.rb
+lib/jekyll/include.rb
 lib/jekyll/layout.rb
 lib/jekyll/page.rb
 lib/jekyll/post.rb
