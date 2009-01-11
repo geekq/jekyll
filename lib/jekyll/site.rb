@@ -35,6 +35,9 @@ module Jekyll
     def process
       self.read_layouts
       self.transform_pages
+      if options['also_copy']
+        self.transform_pages('', options['also_copy'])
+      end
       self.write_posts
     end
     
@@ -89,8 +92,8 @@ module Jekyll
     #            recursively as it descends through directories
     #
     # Returns nothing
-    def transform_pages(dir = '')
-      base = File.join(self.source, dir)
+    def transform_pages(dir = '', source = self.source)
+      base = File.join(source, dir)
       entries = Dir.entries(base)
       entries = entries.reject { |e| 
         (e != '_posts') and ['.', '_'].include?(e[0..0]) 
@@ -101,19 +104,19 @@ module Jekyll
           read_posts(File.join(base, f))
         elsif File.directory?(File.join(base, f))
           next if self.dest.sub(/\/$/, '') == File.join(base, f)
-          transform_pages(File.join(dir, f))
+          transform_pages(File.join(dir, f), source)
         else
-          first3 = File.open(File.join(self.source, dir, f)) { |fd| fd.read(3) }
+          first3 = File.open(File.join(source, dir, f)) { |fd| fd.read(3) }
           
           # if the file appears to have a YAML header then process it as a page
           if first3 == "---"
-            page = Page.new(self.source, dir, f)
+            page = Page.new(source, dir, f)
             page.add_layout(self.layouts, site_payload)
             page.write(self.dest)
           # otherwise copy the file without transforming it
           else
             FileUtils.mkdir_p(File.join(self.dest, dir))
-            FileUtils.cp(File.join(self.source, dir, f), File.join(self.dest, dir, f))
+            FileUtils.cp(File.join(source, dir, f), File.join(self.dest, dir, f))
           end
         end
       end
