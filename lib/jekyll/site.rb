@@ -57,7 +57,7 @@ module Jekyll
       entries = []
       Dir.chdir(base) { entries = Dir['**/*'] }
       entries = entries.reject { |e| e[-1..-1] == '~' }
-      entries = entries.reject { |e| e[1..5] == 'draft' }
+      entries = entries.reject { |e| (e =~ /^draft/) == 0 }
       entries = entries.reject { |e| File.directory?(File.join(base, e)) }
 
       # first pass processes, but does not yet render post content
