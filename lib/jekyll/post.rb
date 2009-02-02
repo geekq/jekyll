@@ -91,7 +91,7 @@ module Jekyll
     #
     # Returns <String>
     def url
-      permalink || self.dir + self.slug + ".html"
+      permalink || self.dir + self.slug
     end
     
     # The UID for this post (useful in feeds)
