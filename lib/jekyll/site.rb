@@ -156,9 +156,15 @@ module Jekyll
     #                     "categories" => [<Post>],
     #                     "topics" => [<Post>] }}
     def site_payload
+      all_posts = self.posts.sort { |a,b| b <=> a }
+      latest_posts = all_posts[0..2]
+      older_posts = all_posts[3..7]
+      
       {"site" => {
         "time" => Time.now, 
-        "posts" => self.posts.sort { |a,b| b <=> a },
+        "posts" => all_posts,
+        "latest_posts" => latest_posts,
+        "older_posts" => older_posts,
         "categories" => post_attr_hash('categories'),
         "topics" => post_attr_hash('topics')
       }}
