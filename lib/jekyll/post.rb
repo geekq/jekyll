@@ -70,7 +70,7 @@ module Jekyll
       else
         prefix = self.categories.empty? ? '' : '/' + self.categories.join('/')
         if Jekyll.permalink_style == :date
-          prefix + date.strftime("/%Y/%m/%d/")
+          prefix + "/#{date.year}/#{date.month}/#{date.day}/"
         else
           prefix + '/'
         end
