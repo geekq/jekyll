@@ -1,6 +1,10 @@
 module Jekyll
   
   module Filters
+    def date_to_rfc2822(date)
+      date.rfc2822
+    end
+    
     def date_to_string(date)
       date.strftime("%d %b %Y")
     end
