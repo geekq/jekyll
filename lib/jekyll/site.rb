@@ -159,12 +159,14 @@ module Jekyll
       all_posts = self.posts.sort { |a,b| b <=> a }
       latest_posts = all_posts[0..2]
       older_posts = all_posts[3..7]
+      rss_posts = all_posts[0..25]
       
       {"site" => {
         "time" => Time.now, 
         "posts" => all_posts,
         "latest_posts" => latest_posts,
         "older_posts" => older_posts,
+        "rss_posts" => rss_posts,
         "categories" => post_attr_hash('categories'),
         "topics" => post_attr_hash('topics')
       }}
