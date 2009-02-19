@@ -83,8 +83,13 @@ module Jekyll
         permalink.to_s.split("/")[0..-2].join("/") + '/'
       else
         prefix = self.categories.empty? ? '' : '/' + self.categories.join('/')
-        if Jekyll.permalink_style == :date
+        case Jekyll.permalink_style
+        when :date
           prefix + date.strftime("/%Y/%m/%d/")
+        when :month
+          prefix + date.strftime("/%Y/%m/")
+        when :year
+          prefix + date.strftime("/%Y/")
         else
           prefix + '/'
         end
