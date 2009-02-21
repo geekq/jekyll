@@ -84,10 +84,10 @@ h2. Install
 
 The best way to install Jekyll is via RubyGems:
 
-  $ sudo gem install mojombo-jekyll -s http://gems.github.com/
+  $ sudo gem install matthewford-jekyll -s http://gems.github.com/
 
-Jekyll requires the gems `directory_watcher`, `liquid`, `open4`, 
-and `maruku` (for markdown support). These are automatically
+Jekyll requires the gems `directory_watcher`, `liquid`, `open4`, `RedCloth`
+`redgreen` and `maruku` (for markdown support). These are automatically
 installed by the gem install command.
 
 Maruku comes with optional support for LaTeX to PNG rendering via
