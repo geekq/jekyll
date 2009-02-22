@@ -225,6 +225,11 @@ h3. Post
   post.content
     The content of the Post.
 
+	post.folded
+		A boolean value which is True if the post contains an HR tag. Authors can use this
+		to break up certain posts so that the full text is displayed only on the full post 
+		page. The first-encountered HR is used as the fold marker.
+
 h2. YAML Front Matter
 
 Any files that contain a YAML front matter block will be processed by Jekyll
@@ -321,6 +326,12 @@ h3. Textilize
 Convert a Textile-formatted string into HTML, formatted via RedCloth
 
   {{ page.excerpt | textilize }}
+
+h3. Post folding
+
+Displays all text in the given Post before the first-encountered HR tag.
+
+	{{ page.content | before_fold }}
 
 h3. Include (Tag)
 
