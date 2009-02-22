@@ -177,6 +177,7 @@ module Jekyll
         "date" => self.date,
         "id" => self.id,
         "topics" => self.topics,
+        "folded" => (self.content.match("<hr") ? true : false),
         "content" => self.content }.deep_merge(self.data)
     end
     
