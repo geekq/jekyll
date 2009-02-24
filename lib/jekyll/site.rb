@@ -1,7 +1,7 @@
 module Jekyll
   
   class Site
-    attr_accessor :source, :dest
+    attr_accessor :source, :dest, :ignore_pattern
     attr_accessor :layouts, :posts, :categories
     
     # Initialize the site
@@ -9,11 +9,19 @@ module Jekyll
     #            the proto-site
     #   +dest+ is the String path to the directory where the generated
     #          site should be written
+    #   +ignore_pattern+ is a regular expression String which
+    #                    specifies a group of files which should not
+    #                    be processed or appear in the generated
+    #                    site. A regular expression matching any files
+    #                    beginning with a `.' or a `_', other than
+    #                    `.htaccess' and `_posts', will automatically
+    #                    be appended to this parameter.
     #
     # Returns <Site>
-    def initialize(source, dest)
+    def initialize(source, dest, ignore_pattern = '^$')
       self.source = source
       self.dest = dest
+      self.ignore_pattern = Regexp.new(ignore_pattern + '|^\.(?!htaccess).*$|^_(?!posts).*$')
       self.layouts = {}
       self.posts = []
       self.categories = Hash.new { |hash, key| hash[key] = Array.new }
@@ -36,8 +44,8 @@ module Jekyll
     def read_layouts
       base = File.join(self.source, "_layouts")
       entries = Dir.entries(base)
-      entries = entries.reject { |e| e[-1..-1] == '~' }
-      entries = entries.reject { |e| File.directory?(File.join(base, e)) }
+      entries.reject! { |e| ignore_pattern.match(e) }
+      entries.reject! { |e| File.directory?(File.join(base, e)) }
       
       entries.each do |f|
         name = f.split(".")[0..-2].join(".")
@@ -56,8 +64,8 @@ module Jekyll
       
       entries = []
       Dir.chdir(base) { entries = Dir['**/*'] }
-      entries = entries.reject { |e| e[-1..-1] == '~' }
-      entries = entries.reject { |e| File.directory?(File.join(base, e)) }
+      entries.reject! { |e| ignore_pattern.match(e) }
+      entries.reject! { |e| File.directory?(File.join(base, e)) }
 
       # first pass processes, but does not yet render post content
       entries.each do |f|
@@ -92,10 +100,8 @@ module Jekyll
     end
     
     # Copy all regular files from <source> to <dest>/ ignoring
-    # any files/directories that are hidden or backup files (start
-    # with "." or end with "~") or contain site content (start with "_")
-    # unless they are "_posts" directories or web server files such as
-    # '.htaccess'
+    # any files/directories that match the regular expression supplied
+    # when creating this.
     #   The +dir+ String is a relative path used to call this method
     #            recursively as it descends through directories
     #
@@ -103,10 +109,7 @@ module Jekyll
     def transform_pages(dir = '')
       base = File.join(self.source, dir)
       entries = Dir.entries(base)
-      entries = entries.reject { |e| e[-1..-1] == '~' }
-      entries = entries.reject do |e|
-        (e != '_posts') and ['.', '_'].include?(e[0..0]) unless ['.htaccess'].include?(e)
-      end
+      entries.reject! { |e| ignore_pattern.match(e) }
       directories = entries.select { |e| File.directory?(File.join(base, e)) }
       files = entries.reject { |e| File.directory?(File.join(base, e)) }
 

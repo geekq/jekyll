@@ -156,6 +156,33 @@ Example usage:
 
   $ jekyll --permalink none
 
+h2. Ignoring Files
+
+Often your project will include files which you do not wish Jekyll to process
+or make available in the generated site. For example, a README, a TODO file, or
+a Capfile. Whilst Jekyll will always ignore files with names that begin with a
+period . (except .htaccess) or an underscore (except _posts) you may specify
+more files which should be ignored with the use of a .jekyllignore file.
+
+A .jekyllignore file may be placed in the root of your project and should
+simply contain Ruby compatible regular expressions (one per line) identifying
+files to ignore. A typical .jekyllignore file might contain the following:
+
+  ^README$
+  ^TODO$
+  ^Capfile$
+  ^config(/*)?$
+
+Note that Jekyll no longer automatically ignores files with names terminating
+with a tilde ~. Instead you must explicitly specify that such backup files be
+ignored with an entry in your .jekyllignore like:
+
+  ^.*~$
+
+or for Emacs users:
+
+  ^#.*#$
+
 h2. Data
 
 Jekyll traverses your site looking for files to process. Any files with YAML

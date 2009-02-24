@@ -57,7 +57,10 @@ module Jekyll
     
     Jekyll.source = source
     Jekyll.dest = dest
-    Jekyll::Site.new(source, dest).process
+    # Read regular expressions identifying files to ignore from
+    # .jekyllignore.
+    ignore_pattern = FileTest.exist?(File.join(source, '.jekyllignore')) ? File.open(File.join(source, '.jekyllignore')) { |f| f.read.split.join('|') } : '^$'
+    Jekyll::Site.new(source, dest, ignore_pattern).process
   end
   
   def self.version
