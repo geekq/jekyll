@@ -167,21 +167,29 @@ more files which should be ignored with the use of a .jekyllignore file.
 A .jekyllignore file may be placed in the root of your project and should
 simply contain Ruby compatible regular expressions (one per line) identifying
 files to ignore. A typical .jekyllignore file might contain the following:
-
-  ^README$
-  ^TODO$
-  ^Capfile$
-  ^config(/*)?$
+<pre>
+  <code>
+    ^README$
+    ^TODO$
+    ^Capfile$
+    ^config(/*)?$
+  </code>
+</pre>
 
 Note that Jekyll no longer automatically ignores files with names terminating
 with a tilde ~. Instead you must explicitly specify that such backup files be
 ignored with an entry in your .jekyllignore like:
-
-  ^.*~$
-
+<pre>
+  <code>
+    ^.*~$
+  </code>
+</pre>
 or for Emacs users:
-
-  ^#.*#$
+<pre>
+  <code>
+    ^#.*#$
+  </code>
+</pre>
 
 h2. Data
 

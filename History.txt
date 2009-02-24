@@ -1,6 +1,6 @@
 ==
   * Minor Enhancements
-    * Ability to specify files to ignore during processing using a .jekyllignore file [guthub.com/al]
+    * Ability to specify files to ignore during processing using a .jekyllignore file [github.com/al]
     * Ability to set post categories via YAML [github.com/qrush]
     * Ability to set prevent a post from publishing via YAML [github.com/qrush]
     * Add textilize filter [github.com/willcodeforfoo]
