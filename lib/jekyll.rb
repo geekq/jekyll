@@ -9,6 +9,7 @@ require 'time'
 require 'yaml'
 
 # stdlib
+require 'open-uri'
 
 # 3rd party
 require 'liquid'

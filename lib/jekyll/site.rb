@@ -57,6 +57,7 @@ module Jekyll
       entries = []
       Dir.chdir(base) { entries = Dir['**/*'] }
       entries = entries.reject { |e| e[-1..-1] == '~' }
+      entries = entries.reject { |e| (e =~ /^draft/) == 0 }
       entries = entries.reject { |e| File.directory?(File.join(base, e)) }
 
       # first pass processes, but does not yet render post content
@@ -158,9 +159,17 @@ module Jekyll
     #                     "categories" => [<Post>],
     #                     "topics" => [<Post>] }}
     def site_payload
+      all_posts = self.posts.sort { |a,b| b <=> a }
+      latest_posts = all_posts[0..2]
+      older_posts = all_posts[3..7]
+      rss_posts = all_posts[0..25]
+      
       {"site" => {
         "time" => Time.now, 
-        "posts" => self.posts.sort { |a,b| b <=> a },
+        "posts" => all_posts,
+        "latest_posts" => latest_posts,
+        "older_posts" => older_posts,
+        "rss_posts" => rss_posts,
         "categories" => post_attr_hash('categories'),
         "topics" => post_attr_hash('topics')
       }}
