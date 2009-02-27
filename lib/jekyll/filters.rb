@@ -39,5 +39,9 @@ module Jekyll
       end
     end
 
+    def strip_html_suffix(input)
+      input.gsub(/\.html$/, '')
+    end
+
   end  
 end
