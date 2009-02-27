@@ -43,6 +43,10 @@ module Jekyll
       end
     end
 
+    def strip_html_suffix(input)
+      input.gsub(/\.html$/, '')
+    end
+
     def gist(id)
       js = open("http://gist.github.com/#{id}.js").read
       js.match(/document.write\('(<div.+)'\)/)[1].gsub(/\\"/, '"').gsub(/\\\//, '/').gsub(/\\n/, '')
