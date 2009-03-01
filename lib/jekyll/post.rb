@@ -192,7 +192,8 @@ module Jekyll
         "id" => self.id,
         "topics" => self.topics,
         "folded" => (self.content.match("<hr") ? true : false),
-        "content" => self.content }.deep_merge(self.data)
+        "content" => self.content,
+        "categories" => self.categories }.deep_merge(self.data)
     end
     
     def inspect

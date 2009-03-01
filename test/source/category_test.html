@@ -1,0 +1,13 @@
+---
+layout: default
+title: Tom Preston-Werner
+---
+
+{% assign category_post = site.categories.foo.first %}
+<div id="category_post">
+  <h1>{{ category_post.title }}</h1>
+  <div>
+    {{ category_post.content }}
+  </div>
+  <div>{{ category_post.categories | array_to_sentence_string }}</div>
+</div>
