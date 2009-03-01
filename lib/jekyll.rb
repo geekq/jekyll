@@ -14,6 +14,7 @@ require 'open-uri'
 # 3rd party
 require 'liquid'
 require 'redcloth'
+require 'hpricot'
 begin
   require 'maruku'
   require 'maruku/ext/math'

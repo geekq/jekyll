@@ -50,6 +50,12 @@ module Jekyll
       end
     end
 
+    def html_truncatewords(input, words = 15, truncate_string = "...")
+      doc = Hpricot.parse(input)
+      (doc/:"text()").to_s.split[0..words].join(' ') + truncate_string
+    end
+
+
     def strip_html_suffix(input)
       input.gsub(/\.html$/, '')
     end
