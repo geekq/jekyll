@@ -66,7 +66,9 @@ class Albino
       stdin.close
       output = stdout.read.strip
     end
-    output
+    
+    # rdiscount wants the closing pre on a line by itself
+    output.gsub( %r(</pre></div>), "</pre>\n</div>" )
   end
 
   def colorize(options = {})
