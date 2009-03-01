@@ -159,8 +159,9 @@ the filename is used. For example, with the permalink style set to 'none' the
 file '2009-01-01-happy-new-year.markdown' will have a permalink like
 'http://yoursite.com/happy-new-year.html'. The date of the post will still be
 read from the filename (and is required!) to be used elsewhere in Jekyll.
-Also supported is the permalink format shortdate, which will use the YYYY/M/D
-for days and months < 10.
+Also supported is the permalink format <code>shortdate</code>, which will use the YYYY/M/D
+for days and months < 10. You can also choose <code>month</code> to just include
+month and year or <code>year</code> to only include the year.
 Example usage:
 
   $ jekyll --permalink none
