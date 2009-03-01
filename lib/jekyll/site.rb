@@ -2,7 +2,7 @@ module Jekyll
   
   class Site
     attr_accessor :source, :dest, :ignore_pattern
-    attr_accessor :layouts, :posts, :categories
+    attr_accessor :layouts, :posts, :categories, :settings
     
     # Initialize the site
     #   +source+ is String path to the source directory containing
@@ -25,6 +25,7 @@ module Jekyll
       self.layouts = {}
       self.posts = []
       self.categories = Hash.new { |hash, key| hash[key] = Array.new }
+      self.read_settings
     end
     
     # Do the actual work of processing the site and generating the
@@ -37,6 +38,16 @@ module Jekyll
       self.write_posts
     end
 
+    # read settings from _site.yaml
+    def read_settings
+      file = File.join(self.source, "_site.yaml")
+      if File.exist?(file)
+        self.settings = File.open(file) { |f| YAML::load(f) }
+      else
+        self.settings = {}
+      end
+    end
+    
     # Read all the files in <source>/_layouts into memory for later use.
     #
     # Returns nothing
@@ -159,7 +170,7 @@ module Jekyll
       older_posts = all_posts[3..7]
       rss_posts = all_posts[0..25]
       
-      {"site" => {
+      {"site" => self.settings.merge({
         "time" => Time.now, 
         "posts" => all_posts,
         "latest_posts" => latest_posts,
@@ -167,7 +178,7 @@ module Jekyll
         "rss_posts" => rss_posts,
         "categories" => post_attr_hash('categories'),
         "topics" => post_attr_hash('topics')
-      }}
+      })}
     end
 
     # Filter out any files/directories that are hidden or backup files (start
