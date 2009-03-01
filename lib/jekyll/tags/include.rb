@@ -23,10 +23,12 @@ module Jekyll
         return "Include file '#{@file}' contains invalid characters or sequences"
       end
 
-      if Jekyll.site && Jekyll.site.options
+      path = File.join(Jekyll.source, '_includes')
+
+      # this doesn't ever seem to work right. seems to be a variable scoping issue
+      if Jekyll.site && Jekyll.site.options && Jekyll.site.options['include_path']
+         puts "Using options"
          path = Jekyll.site.options['include_path']
-      else
-         path = File.join(Jekyll.source, '_includes')
       end
 
       Dir.chdir(path) do
