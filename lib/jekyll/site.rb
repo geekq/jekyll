@@ -133,13 +133,13 @@ module Jekyll
       directories = entries.select { |e| File.directory?(File.join(base, e)) }
       files = entries.reject { |e| File.directory?(File.join(base, e)) }
 
-      # we need to make sure to process _posts *first* otherwise they 
-      # might not be available yet to other templates as {{ site.posts }}
-      if entries.include?('_posts')
-        entries.delete('_posts')
-        read_posts(dir)
-      end
       [directories, files].each do |entries|
+        # we need to make sure to process _posts *first* otherwise they 
+        # might not be available yet to other templates as {{ site.posts }}
+        if entries.include?('_posts')
+          entries.delete('_posts')
+          read_posts(dir)
+        end
         entries.each do |f|
           if File.symlink?(File.join(base, f))
             # preserve symlinks
