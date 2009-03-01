@@ -51,7 +51,7 @@ end
 
 module Jekyll
   class << self
-    attr_accessor :source, :dest, :lsi, :pygments, :markdown_proc, :content_type, :permalink_style
+    attr_accessor :source, :dest, :site, :lsi, :pygments, :markdown_proc, :content_type, :permalink_style
   end
   
   Jekyll.lsi = false
@@ -67,7 +67,8 @@ module Jekyll
     # Read regular expressions identifying files to ignore from
     # .jekyllignore.
     ignore_pattern = FileTest.exist?(File.join(source, '.jekyllignore')) ? File.open(File.join(source, '.jekyllignore')) { |f| f.read.split.join('|') } : '^$'
-    Jekyll::Site.new(source, dest, ignore_pattern).process
+    Jekyll.site = Jekyll::Site.new(source, dest, ignore_pattern)
+    Jekyll.site.process
   end
   
   def self.version
