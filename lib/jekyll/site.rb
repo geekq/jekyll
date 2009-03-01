@@ -125,7 +125,12 @@ module Jekyll
       end
       [directories, files].each do |entries|
         entries.each do |f|
-          if File.directory?(File.join(base, f))
+          if File.symlink?(File.join(base, f))
+            # preserve symlinks
+            FileUtils.mkdir_p(File.join(self.dest, dir))
+            File.symlink(File.readlink(File.join(base, f)),
+                         File.join(self.dest, dir, f))
+          elsif File.directory?(File.join(base, f))
             next if self.dest.sub(/\/$/, '') == File.join(base, f)
             transform_pages(File.join(dir, f))
           else

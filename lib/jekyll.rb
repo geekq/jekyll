@@ -41,7 +41,13 @@ require 'jekyll/post'
 require 'jekyll/filters'
 require 'jekyll/tags/highlight'
 require 'jekyll/tags/include'
+require 'jekyll/tags/markdown'
+require 'jekyll/tags/smartypants'
 require 'jekyll/albino'
+
+if File.exists?('_jekyll/extensions.rb')
+  require '_jekyll/extensions.rb'
+end
 
 module Jekyll
   class << self
