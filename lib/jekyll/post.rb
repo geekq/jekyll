@@ -20,6 +20,7 @@ module Jekyll
     
     attr_accessor :date, :slug, :ext, :categories, :topics, :published
     attr_accessor :data, :content, :output
+    attr_accessor :previous, :next
     
     # Initialize this Post instance.
     #   +base+ is the String path to the dir containing the post file
@@ -39,11 +40,26 @@ module Jekyll
       self.process(name)
       self.read_yaml(@base, name)
 
-			if self.data.has_key?('published') && self.data['published'] == false
-				self.published = false
-			else
-				self.published = true
-			end
+      if self.data.has_key?('published') && self.data['published'] == false
+        self.published = false
+      else
+        self.published = true
+      end
+
+      self.data['topics'] = if self.topics.empty?
+        if self.data.has_key?('topic')
+          self.topics << self.data['topic']
+        elsif self.data.has_key?('topics')
+          if self.data['topics'].kind_of? Array
+            self.topics = self.topics['topics']
+          elsif self.data['topics'].kind_of? String
+            self.topics = self.data['topics'].split
+          else
+            self.topics = []
+          end
+        end
+      end
+      
       
       if self.categories.empty?
         if self.data.has_key?('category')
@@ -51,10 +67,12 @@ module Jekyll
         elsif self.data.has_key?('categories')
           # Look for categories in the YAML-header, either specified as
           # an array or a string.
-          if self.data['categories'].kind_of? String
+	  if self.data['categories'].kind_of? Array 
+            self.categories = self.data['categories']
+          elsif self.data['categories'].kind_of? String
             self.categories = self.data['categories'].split
           else
-            self.categories = self.data['categories']
+            self.categories = []
           end
         end
       end
@@ -89,9 +107,13 @@ module Jekyll
         permalink.to_s.split("/")[0..-2].join("/") + '/'
       else
         prefix = self.categories.empty? ? '' : '/' + self.categories.join('/')
-        if Jekyll.permalink_style == :date ||
-          Jekyll.permalink_style == :pretty
+        case Jekyll.permalink_style
+        when :pretty
           prefix + date.strftime("/%Y/%m/%d/")
+        when :date
+          prefix + date.strftime("/%Y/%m/%d/")
+        when :shortdate
+          prefix + "/#{date.year}/#{date.month}/#{date.day}/"
         else
           prefix + '/'
         end
@@ -156,7 +178,9 @@ module Jekyll
       payload =
       {
         "site" => { "related_posts" => related_posts(site_payload["site"]["posts"]) },
-        "page" => self.to_liquid
+        "page" => self.to_liquid,
+        "previous" => self.previous,
+        "next" => self.next
       }
       payload = payload.deep_merge(site_payload)
       
