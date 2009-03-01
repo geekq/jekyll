@@ -29,6 +29,13 @@ module Jekyll
       input.split.length
     end
     
+    # Returns all content before the first-encountered <hr /> tag.
+    # Allows authors to mark the fold with an hr in their drafts.
+    # e.g. {{ content | before_fold }}
+    def before_fold(input)
+      input.split("<hr").first
+    end
+    
     def array_to_sentence_string(array)
       connector = "and"
       case array.length
