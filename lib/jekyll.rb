@@ -9,6 +9,7 @@ require 'time'
 require 'yaml'
 
 # stdlib
+require 'open-uri'
 
 # 3rd party
 require 'liquid'
@@ -64,4 +65,6 @@ module Jekyll
     yml = YAML.load(File.read(File.join(File.dirname(__FILE__), *%w[.. VERSION.yml])))
     "#{yml[:major]}.#{yml[:minor]}.#{yml[:patch]}"
   end
+
+  BINARY = File.expand_path(File.dirname(__FILE__) + '/../bin/jekyll')
 end
