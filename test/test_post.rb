@@ -98,6 +98,30 @@ class TestPost < Test::Unit::TestCase
       assert p.categories.include?('baz')
     end
   end
+
+  def test_empty_yaml_categories
+    p = Post.new(File.join(File.dirname(__FILE__), *%w[source]), '',  "2009-01-27-no-categories.textile")
+    assert p.categories.empty?
+  end
+
+  def test_yaml_topic
+    p = Post.new(File.join(File.dirname(__FILE__), *%w[source]), '',  "2009-01-27-topic.textile")
+    assert p.topics.include?('foo')
+    assert p.data['topics'].include?('foo')
+  end
+
+  def test_yaml_topics
+    p = Post.new(File.join(File.dirname(__FILE__), *%w[source]), '',  "2009-01-27-topics.textile")
+    assert p.topics.include?('foo')
+    assert p.topics.include?('bar')
+    assert p.data['topics'].include?('foo')
+  end
+  
+  def test_empty_yaml_topics
+    p = Post.new(File.join(File.dirname(__FILE__), *%w[source]), '',  "2009-01-27-no-topics.textile")
+    assert p.topics.empty?
+    assert p.data['topics'].empty?
+  end
   
   def test_render
     p = Post.new(File.join(File.dirname(__FILE__), *%w[source]), '',  "2008-10-18-foo-bar.textile")
@@ -137,5 +161,14 @@ class TestPost < Test::Unit::TestCase
     p.render(layouts, {"site" => {"posts" => []}})
     
     assert_equal "<<< <hr />\n<p>Tom Preston-Werner github.com/mojombo</p>\n\n<p>This <em>is</em> cool</p> >>>", p.output
+  end
+  
+  def test_dir_with_short_date_permalink_type
+    Jekyll.permalink_style = :shortdate
+    p = Post.allocate
+    p.process("2008-02-03-permalinked-post.textile")
+    p.categories = []
+    assert_equal "/2008/2/3/", p.dir
+    Jekyll.permalink_style = :date
   end
 end

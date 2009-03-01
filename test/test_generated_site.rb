@@ -32,6 +32,6 @@ class TestGeneratedSite < Test::Unit::TestCase
 
   def test_post_categories_in_category_test
     category_test = File.read(File.join(dest_dir, 'category_test.html'))
-    assert category_test.include?('<div>foo, bar, and baz</div>')
+    assert category_test.include?('<div>foo bar baz</div>')
   end
 end
