@@ -37,5 +37,9 @@ class TestFilters < Test::Unit::TestCase
     assert_equal "AT&amp;T", @filter.xml_escape("AT&T")
     assert_equal "&lt;code&gt;command &amp;lt;filename&amp;gt;&lt;/code&gt;", @filter.xml_escape("<code>command &lt;filename&gt;</code>")
   end
+
+  def test_strip_html_suffix
+    assert_equal "/posts/zomg", @filter.strip_html_suffix("/posts/zomg.html")
+  end
   
 end
