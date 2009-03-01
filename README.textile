@@ -333,6 +333,15 @@ Jekyll expects all include files to be placed in an <code>_includes</code>
 directory at the root of your source dir. So this will embed the contents of
 <code>/path/to/proto/site/_includes/sig.textile</code> into the calling file.
 
+An alternate syntax which supports using page variables is the following:
+
+<pre>{% include from page.includefile %}</pre>
+
+which allows you to pass in the name of the file to include from a YAML front matter block.
+
+This means if <code>{{ page.includefile }}</code> outputs <code>flickr.html</code> then
+the above include would load <code>_includes/flickr.html</code>.
+
 h3. Code Highlighting (Block)
 
 Jekyll has built in support for syntax highlighting of over "100

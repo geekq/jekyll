@@ -1,12 +1,24 @@
 module Jekyll
   
   class IncludeTag < Liquid::Tag
-    def initialize(tag_name, file, tokens)
+    Syntax = /from\s+(#{Liquid::VariableSignature}+)/
+    
+    def initialize(tag_name, markup, tokens)
       super
-      @file = file.strip
+      if markup =~ Syntax
+        @variable = $1
+        @use_context = 1
+      else
+        @file = markup.strip
+        @use_context = 0
+      end
     end
     
     def render(context)
+      if @use_context == 1
+        @file = context[@variable]
+      end
+
       if @file !~ /^[a-zA-Z0-9_\/\.-]+$/ || @file =~ /\.\// || @file =~ /\/\./
         return "Include file '#{@file}' contains invalid characters or sequences"
       end
