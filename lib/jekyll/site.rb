@@ -1,7 +1,7 @@
 module Jekyll
   
   class Site
-    attr_accessor :source, :dest
+    attr_accessor :source, :dest, :ignore_pattern
     attr_accessor :layouts, :posts, :categories
     
     # Initialize the site
@@ -9,11 +9,19 @@ module Jekyll
     #            the proto-site
     #   +dest+ is the String path to the directory where the generated
     #          site should be written
+    #   +ignore_pattern+ is a regular expression String which
+    #                    specifies a group of files which should not
+    #                    be processed or appear in the generated
+    #                    site. A regular expression matching any files
+    #                    beginning with a `.' or a `_', other than
+    #                    `.htaccess' and `_posts', will automatically
+    #                    be appended to this parameter.
     #
     # Returns <Site>
-    def initialize(source, dest)
+    def initialize(source, dest, ignore_pattern = '^$')
       self.source = source
       self.dest = dest
+      self.ignore_pattern = Regexp.new(ignore_pattern + '|^\.(?!htaccess).*$|^_(?!posts).*$')
       self.layouts = {}
       self.posts = []
       self.categories = Hash.new { |hash, key| hash[key] = Array.new }
@@ -86,10 +94,8 @@ module Jekyll
     end
     
     # Copy all regular files from <source> to <dest>/ ignoring
-    # any files/directories that are hidden or backup files (start
-    # with "." or "#" or end with "~") or contain site content (start with "_")
-    # unless they are "_posts" directories or web server files such as
-    # '.htaccess'
+    # any files/directories that match the regular expression supplied
+    # when creating this.
     #   The +dir+ String is a relative path used to call this method
     #            recursively as it descends through directories
     #
@@ -175,6 +181,7 @@ module Jekyll
           ['.', '_', '#'].include?(e[0..0]) or e[-1..-1] == '~'
         end
       end
+      entries = entries.reject { |e| ignore_pattern.match(e) }
     end
 
   end
