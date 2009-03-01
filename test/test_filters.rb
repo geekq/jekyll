@@ -13,6 +13,10 @@ class TestFilters < Test::Unit::TestCase
   def test_textilize_with_simple_string
     assert_equal "<p>something <strong>really</strong> simple</p>", @filter.textilize("something *really* simple")
   end
+  
+  def test_identify_and_split_at_fold
+    assert_equal "<p>something</p>", @filter.before_fold("<p>something</p><hr/><p>something else</p>")
+  end
 
   def test_array_to_sentence_string_with_no_args
     assert_equal "", @filter.array_to_sentence_string([])
