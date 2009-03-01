@@ -58,5 +58,24 @@ module Jekyll
       js = open("http://gist.github.com/#{id}.js").read
       js.match(/document.write\('(<div.+)'\)/)[1].gsub(/\\"/, '"').gsub(/\\\//, '/').gsub(/\\n/, '')
     end
+    
+    def educate(input)
+      Smartypants.educate_string(input)
+    end
+
+    def markdown(input)
+      Maruku.new(input).to_html
+    end
   end  
+
+  # Maruku, inexplicably, offers no way to access its Smartypants
+  # implementation outside of the Markdown interface. So here's a hack.
+  class Smartypants; end
+  class << Smartypants
+    include MaRuKu::In::Markdown::SpanLevelParser
+    include MaRuKu::Helpers
+    def educate_string(s)
+      educate([s]).map{ |x| x.to_html_entity rescue x }.join
+    end
+  end
 end
