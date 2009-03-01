@@ -44,7 +44,7 @@
 require 'open4'
 
 class Albino
-  @@bin = Rails.development? ? 'pygmentize' : '/usr/bin/pygmentize' rescue 'pygmentize'
+  @@bin = '/usr/local/bin/pygmentize'
 
   def self.bin=(path)
     @@bin = path
@@ -54,9 +54,9 @@ class Albino
     new(*args).colorize
   end
 
-  def initialize(target, lexer = :text, format = :html)
+  def initialize(target, lexer = :text, format = :html, encoding = "encoding=utf8")
     @target  = File.exists?(target) ? File.read(target) : target rescue target
-    @options = { :l => lexer, :f => format }
+    @options = { :l => lexer, :f => format, :P => encoding }
   end
 
   def execute(command)
@@ -64,7 +64,13 @@ class Albino
     Open4.popen4(command) do |pid, stdin, stdout, stderr|
       stdin.puts @target
       stdin.close
+
       output = stdout.read.strip
+
+#     puts "pid        : #{ pid }"
+#     puts "stdout     : #{ stdout.read.strip }"
+#     puts "stderr     : #{ stderr.read.strip }"   
+
     end
     
     # rdiscount wants the closing pre on a line by itself
