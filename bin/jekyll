@@ -79,10 +79,10 @@ destination = nil
 
 case ARGV.size
   when 0
-    source = '.'
-    destination = File.join('.', '_site')
+    source = Dir.pwd
+    destination = File.join(source, '_site')
   when 1
-    source = '.'
+    source = Dir.pwd
     destination = ARGV[0]
   when 2
     source = ARGV[0]
