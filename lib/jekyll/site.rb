@@ -3,6 +3,7 @@ module Jekyll
   class Site
     attr_accessor :source, :dest, :ignore_pattern
     attr_accessor :layouts, :posts, :categories, :settings
+    attr_accessor :options
     
     # Initialize the site
     #   +source+ is String path to the source directory containing
@@ -26,6 +27,15 @@ module Jekyll
       self.posts = []
       self.categories = Hash.new { |hash, key| hash[key] = Array.new }
       self.read_settings
+      self.options = {}
+
+      config_file_path = File.join(self.source, '.jekyllrc')
+      if File.exists?(config_file_path)
+        self.options = YAML.load(File.read(config_file_path))
+      end
+      
+      self.options['layouts_path']  ||= File.join(self.source, '_layouts')
+      self.options['includes_path'] ||= File.join(self.source, '_includes')
     end
     
     # Do the actual work of processing the site and generating the
@@ -35,6 +45,9 @@ module Jekyll
     def process
       self.read_layouts
       self.transform_pages
+      if options['also_copy']
+        self.transform_pages('', options['also_copy'])
+      end
       self.write_posts
     end
 
@@ -52,7 +65,7 @@ module Jekyll
     #
     # Returns nothing
     def read_layouts
-      base = File.join(self.source, "_layouts")
+      base = options['layouts_path']
       entries = []
       Dir.chdir(base) { entries = filter_entries(Dir['*.*']) }
       
@@ -114,8 +127,8 @@ module Jekyll
     #            recursively as it descends through directories
     #
     # Returns nothing
-    def transform_pages(dir = '')
-      base = File.join(self.source, dir)
+    def transform_pages(dir = '', source = self.source)
+      base = File.join(source, dir)
       entries = filter_entries(Dir.entries(base))
       directories = entries.select { |e| File.directory?(File.join(base, e)) }
       files = entries.reject { |e| File.directory?(File.join(base, e)) }
@@ -135,19 +148,20 @@ module Jekyll
                          File.join(self.dest, dir, f))
           elsif File.directory?(File.join(base, f))
             next if self.dest.sub(/\/$/, '') == File.join(base, f)
-            transform_pages(File.join(dir, f))
+            transform_pages(File.join(dir, f), source)
           else
-            first3 = File.open(File.join(self.source, dir, f)) { |fd| fd.read(3) }
+            first3 = File.open(File.join(source, dir, f)) { |fd| fd.read(3) }
         
+            # if the file appears to have a YAML header then process it as a page
             if first3 == "---"
               # file appears to have a YAML header so process it as a page
-              page = Page.new(self.source, dir, f)
-              page.render(self.layouts, site_payload)
+              page = Page.new(source, dir, f)
+              page.add_layout(self.layouts, site_payload)
               page.write(self.dest)
             else
               # otherwise copy the file without transforming it
               FileUtils.mkdir_p(File.join(self.dest, dir))
-              FileUtils.cp(File.join(self.source, dir, f), File.join(self.dest, dir, f))
+              FileUtils.cp(File.join(source, dir, f), File.join(self.dest, dir, f))
             end
           end
         end

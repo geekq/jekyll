@@ -37,7 +37,7 @@ module Jekyll
     #   +site_payload+ is the site payload hash
     #
     # Returns nothing
-    def render(layouts, site_payload)
+    def add_layout(layouts, site_payload)
       payload = {"page" => self.data}.deep_merge(site_payload)
       do_layout(payload, layouts)
     end

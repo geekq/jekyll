@@ -22,14 +22,20 @@ module Jekyll
       if @file !~ /^[a-zA-Z0-9_\/\.-]+$/ || @file =~ /\.\// || @file =~ /\/\./
         return "Include file '#{@file}' contains invalid characters or sequences"
       end
-      
-      Dir.chdir(File.join(Jekyll.source, '_includes')) do
+
+      if Jekyll.site && Jekyll.site.options
+         path = Jekyll.site.options['include_path']
+      else
+         path = File.join(Jekyll.source, '_includes')
+      end
+
+      Dir.chdir(path) do
         choices = Dir['**/*'].reject { |x| File.symlink?(x) }
         if choices.include?(@file)
           source = File.read(@file)
           partial = Liquid::Template.parse(source)
           context.stack do
-            partial.render(context)
+            partial.render(context, [Jekyll::Filters])
           end
         else
           "Included file '#{@file}' not found in _includes directory"
