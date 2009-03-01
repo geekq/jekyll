@@ -16,7 +16,7 @@ class TestGeneratedSite < Test::Unit::TestCase
 
   def test_post_content_in_index
     # confirm that the {{ post.content }} is rendered OK
-    latest_post = Dir[File.join(@source, '_posts/*')].last
+    latest_post = Dir[File.join(@source, '_posts/*')].sort.last
     post = Post.new(@source, '', File.basename(latest_post))
     Jekyll.content_type = post.determine_content_type
     post.transform

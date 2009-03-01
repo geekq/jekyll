@@ -1,0 +1,6 @@
+^Capfile$
+^config$
+^config/*$
+^\.jekyllignore$
+^#.*#$
+^.*~$
