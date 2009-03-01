@@ -57,7 +57,7 @@ module Jekyll
   Jekyll.lsi = false
   Jekyll.pygments = false
   Jekyll.markdown_proc = Proc.new { |x| Maruku.new(x).to_html }
-  Jekyll.permalink_style = :date
+  Jekyll.permalink_style = :pretty
   
   def self.process(source, dest)
     require 'classifier' if Jekyll.lsi

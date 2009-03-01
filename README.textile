@@ -151,7 +151,9 @@ Default port is 4000:
   $ jekyll --server [PORT]
 
 By default, the permalink for each post begins with its date in 'YYYY/MM/DD'
-format. If you do not wish to have the date appear in the URL of each post, 
+format. The default is to use <code>slug/index.html</code> style URLs (<code>pretty</code>) but if you
+would prefer having <code>slug.html</code> then pass <code>date> as the option.
+If you do not wish to have the date appear in the URL of each post, 
 you can change the permalink style to 'none' so that only the 'slug' part of
 the filename is used. For example, with the permalink style set to 'none' the
 file '2009-01-01-happy-new-year.markdown' will have a permalink like

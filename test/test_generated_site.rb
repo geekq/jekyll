@@ -24,10 +24,10 @@ class TestGeneratedSite < Test::Unit::TestCase
   end
 
   def test_unpublished_posts_are_hidden
-    published = Dir[File.join(dest_dir, 'publish_test/2008/02/02/*.html')].map {|f| File.basename(f)}
+    published = Dir[File.join(dest_dir, 'publish_test/2008/02/02/*/index.html')].map {|f| File.basename(f)}
     
     assert_equal 1, published.size
-    assert_equal "published.html", published.first
+    assert_equal "index.html", published.first
   end
 
   def test_post_categories_in_category_test
