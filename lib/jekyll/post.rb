@@ -46,36 +46,32 @@ module Jekyll
         self.published = true
       end
 
-      self.data['topics'] = if self.topics.empty?
-        if self.data.has_key?('topic')
-          self.topics << self.data['topic']
-        elsif self.data.has_key?('topics')
-          if self.data['topics'].kind_of? Array
-            self.topics = self.topics['topics']
-          elsif self.data['topics'].kind_of? String
-            self.topics = self.data['topics'].split
-          else
-            self.topics = []
-          end
+      if self.data.has_key?('topic')
+        self.topics << self.data['topic']
+      elsif self.data.has_key?('topics')
+        if self.data['topics'].kind_of? Array
+          self.topics = self.data['topics']
+        elsif self.data['topics'].kind_of? String
+          self.topics = self.data['topics'].split
+        else
+          self.topics = []
         end
       end
-      
-      
-      if self.categories.empty?
-        if self.data.has_key?('category')
-          self.categories << self.data['category']
-        elsif self.data.has_key?('categories')
-          # Look for categories in the YAML-header, either specified as
-          # an array or a string.
-	  if self.data['categories'].kind_of? Array 
-            self.categories = self.data['categories']
-          elsif self.data['categories'].kind_of? String
-            self.categories = self.data['categories'].split
-          else
-            self.categories = []
-          end
+
+      if self.data.has_key?('category')
+        self.categories << self.data['category']
+      elsif self.data.has_key?('categories')
+        # Look for categories in the YAML-header, either specified as
+        # an array or a string.
+        if self.data['categories'].kind_of? Array 
+          self.categories = self.data['categories']
+        elsif self.data['categories'].kind_of? String
+          self.categories = self.data['categories'].split
+        else
+          self.categories = []
         end
       end
+    
     end
     
     # Spaceship is based on Post#date
