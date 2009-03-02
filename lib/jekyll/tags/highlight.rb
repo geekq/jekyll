@@ -11,9 +11,9 @@ module Jekyll
         @lang = $1
         if defined? $2
           # additional options to pass to Albino.
-          @options = { 'O' => 'linenos=inline' }
+          @options = { 'O' => 'linenos=table,encoding=utf8,style=native' }
         else
-          @options = {}
+          @options = { 'O' => 'encoding=utf8,style=native' }
         end
       else
         raise SyntaxError.new("Syntax Error in 'highlight' - Valid syntax: highlight <lang> [linenos]")
@@ -32,7 +32,8 @@ module Jekyll
       if Jekyll.content_type == :markdown
         return "\n" + Albino.new(code, @lang).to_s(@options) + "\n"
       else
-        "<notextile>" + Albino.new(code, @lang).to_s(@options) + "</notextile>"
+        content = "\n<notextile>\n" + Albino.new(code, @lang).to_s(@options) + "\n</notextile>\n"
+        content
       end
     end
     

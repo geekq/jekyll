@@ -54,9 +54,9 @@ class Albino
     new(*args).colorize
   end
 
-  def initialize(target, lexer = :text, format = :html, encoding = "encoding=utf8")
+  def initialize(target, lexer = :text, format = :html )
     @target  = File.exists?(target) ? File.read(target) : target rescue target
-    @options = { :l => lexer, :f => format, :P => encoding }
+    @options = { :l => lexer, :f => format }
   end
 
   def execute(command)
