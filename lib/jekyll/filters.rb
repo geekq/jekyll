@@ -13,6 +13,10 @@ module Jekyll
       date.strftime("%d %b %Y")
     end
 
+    def archivedate_to_string(date)
+      Time.parse("01-" + date).strftime("%B %Y")
+    end
+
     def date_to_long_string(date)
       date.strftime("%d %B %Y")
     end

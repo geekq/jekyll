@@ -101,7 +101,8 @@ module Jekyll
       
       # second pass renders each post now that full site payload is available
       self.posts.each_with_index do |post, idx|
-        post.previous = posts[idx - 1] unless idx - 1 < 0
+        post.numericid = idx+1
+	post.previous = posts[idx - 1] unless idx - 1 < 0
         post.next = posts[idx + 1] unless idx + 1 >= posts.size
         post.render(self.layouts, site_payload)
       end
@@ -188,18 +189,21 @@ module Jekyll
     #                     "topics" => [<Post>] }}
     def site_payload
       all_posts = self.posts.sort { |a,b| b <=> a }
-      latest_posts = all_posts[0..2]
+      latest_post = all_posts[0]
+      recent_posts = all_posts[1..2]
       older_posts = all_posts[3..7]
       rss_posts = all_posts[0..25]
       
       {"site" => self.settings.merge({
         "time" => Time.now, 
         "posts" => all_posts,
-        "latest_posts" => latest_posts,
+        "latest_post" => latest_post,
+        "recent_posts" => recent_posts,
         "older_posts" => older_posts,
         "rss_posts" => rss_posts,
         "categories" => post_attr_hash('categories'),
-        "topics" => post_attr_hash('topics')
+        "topics" => post_attr_hash('topics'),
+        "archives" => post_attr_hash('archivedate')
       })}
     end
 

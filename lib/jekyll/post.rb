@@ -20,7 +20,7 @@ module Jekyll
     
     attr_accessor :date, :slug, :ext, :categories, :topics, :published
     attr_accessor :data, :content, :output
-    attr_accessor :previous, :next
+    attr_accessor :previous, :next, :numericid, :archivedate
     
     # Initialize this Post instance.
     #   +base+ is the String path to the dir containing the post file
@@ -31,7 +31,9 @@ module Jekyll
     def initialize(source, dir, name)
       @base = File.join(source, dir, '_posts')
       @name = name
-      
+
+      self.numericid = 0
+ 
       self.categories = dir.split('/').reject { |x| x.empty? }
       
       parts = name.split('/')
@@ -88,6 +90,7 @@ module Jekyll
     def process(name)
       m, cats, date, slug, ext = *name.match(MATCHER)
       self.date = Time.parse(date)
+      self.archivedate = self.date.month.to_s + "-" + self.date.year.to_s
       self.slug = slug
       self.ext = ext
     end
@@ -212,8 +215,11 @@ module Jekyll
     def to_liquid
       { "title" => self.data["title"] || self.slug.split('-').select {|w| w.capitalize! || w }.join(' '),
         "url" => self.url,
+	"topleveldir" => self.url.split("/")[1],
         "date" => self.date,
+        "archivedate" => self.archivedate,
         "id" => self.id,
+        "numericid" => self.numericid,
         "topics" => self.topics,
         "folded" => (self.content.match("<hr") ? true : false),
         "content" => self.content,

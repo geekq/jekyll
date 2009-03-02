@@ -38,6 +38,8 @@ module Jekyll
     #
     # Returns nothing
     def add_layout(layouts, site_payload)
+      self.data['url'] = @dir
+      self.data['topleveldir'] = @dir.split("/")[1]
       payload = {"page" => self.data}.deep_merge(site_payload)
       do_layout(payload, layouts)
     end
