@@ -207,8 +207,12 @@ If present, Jekyll will require the file <code>_jekyll/extensions.rb</code> at
 load time. You can use this to easily extend Jekyll on a per site basis, for
 example to create a new filter:
 <pre><code>
-  def date_to_year(date)
-    date.strftime("%Y")
+  module Jekyll
+    module Filters
+      def date_to_year(date)
+        date.strftime("%Y")
+      end
+    end
   end
 </code></pre>
 
