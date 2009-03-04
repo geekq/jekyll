@@ -107,7 +107,7 @@ class TestPost < Test::Unit::TestCase
   def test_yaml_topic
     p = Post.new(File.join(File.dirname(__FILE__), *%w[source]), '',  "2009-01-27-topic.textile")
     assert p.topics.include?('foo')
-    assert p.data['topics'].include?('foo')
+    assert p.data['topic'].include?('foo')
   end
 
   def test_yaml_topics
@@ -120,7 +120,7 @@ class TestPost < Test::Unit::TestCase
   def test_empty_yaml_topics
     p = Post.new(File.join(File.dirname(__FILE__), *%w[source]), '',  "2009-01-27-no-topics.textile")
     assert p.topics.empty?
-    assert p.data['topics'].empty?
+    assert p.data['topics'].nil?
   end
   
   def test_render
