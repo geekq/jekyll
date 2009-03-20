@@ -8,7 +8,7 @@ module Jekyll
       attr_accessor :lsi
     end
     
-    MATCHER = /^(.+\/)*(\d+-\d+-\d+)-(.*)((?:\.md)?\.[^.]+)$/
+    MATCHER = /^(.+\/)*(\d+-\d+-\d+)-(.*?)((?:\.md)?\.[^.]+)$/
     DEFAULT_DATA = {'layout' => 'post'}
     
     # Post name validator. Post filenames must be like:
