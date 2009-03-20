@@ -19,6 +19,13 @@ module Jekyll
       end
     end
     
+    def check_markdown_header
+      if self.content =~ /(.*)\n===*\n/
+        self.data['title'] = $1
+        self.content = self.content[$&.size..-1]
+      end
+    end
+
     # Transform the contents based on the file extension.
     #
     # Returns nothing
