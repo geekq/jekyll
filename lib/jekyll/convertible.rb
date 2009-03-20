@@ -22,7 +22,6 @@ module Jekyll
     def check_markdown_header
       if self.content =~ /(.*)\n===*\n/
         self.data['title'] = $1
-        self.content = self.content[$&.size..-1]
       end
     end
 
