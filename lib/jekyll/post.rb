@@ -8,7 +8,8 @@ module Jekyll
       attr_accessor :lsi
     end
     
-    MATCHER = /^(.+\/)*(\d+-\d+-\d+)-(.*)(\.[^.]+)$/
+    MATCHER = /^(.+\/)*(\d+-\d+-\d+)-(.*)((?:\.md)?\.[^.]+)$/
+    DEFAULT_DATA = {'layout' => 'post'}
     
     # Post name validator. Post filenames must be like:
     #   2008-11-05-my-awesome-post.textile
@@ -22,6 +23,13 @@ module Jekyll
     attr_accessor :data, :content, :output
     attr_accessor :previous, :next, :numericid, :archivedate
     
+    def check_markdown_header
+      if self.content =~ /(.*)\n===*\n/
+        self.data['title'] = $1
+        self.content = self.content[$&.size..-1]
+      end
+    end
+
     # Initialize this Post instance.
     #   +base+ is the String path to the dir containing the post file
     #   +name+ is the String filename of the post file
@@ -40,7 +48,9 @@ module Jekyll
       self.topics = parts.size > 1 ? parts[0..-2] : []
       
       self.process(name)
+      self.data = DEFAULT_DATA
       self.read_yaml(@base, name)
+      check_markdown_header
 
       if self.data.has_key?('published') && self.data['published'] == false
         self.published = false
