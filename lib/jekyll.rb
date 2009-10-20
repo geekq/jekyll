@@ -35,10 +35,6 @@ require 'jekyll/tags/markdown'
 require 'jekyll/tags/smartypants'
 require 'jekyll/albino'
 
-if File.exists?('_jekyll/extensions.rb')
-  require '_jekyll/extensions.rb'
-end
-
 module Jekyll
   class << self
     attr_accessor :source, :dest, :site, :lsi, :pygments, :markdown_proc, :content_type, :permalink_style
@@ -52,6 +48,11 @@ module Jekyll
   def self.process(source, dest)
     require 'classifier' if Jekyll.lsi
     
+    ext_file = File.join(source, '_jekyll/extensions.rb')
+    if File.exists?(ext_file)
+      require ext_file
+    end
+
     Jekyll.source = source
     Jekyll.dest = dest
     # Read regular expressions identifying files to ignore from
