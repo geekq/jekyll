@@ -4,7 +4,7 @@ module Jekyll
     def to_s
       self.content || ''
     end
-    
+
     # Read the YAML frontmatter
     #   +base+ is the String path to the dir containing the file
     #   +name+ is the String filename of the file
@@ -12,15 +12,15 @@ module Jekyll
     # Returns nothing
     def read_yaml(base, name)
       self.content = File.read(File.join(base, name))
-      
+
       if self.content =~ /^(---\s*\n.*?)\n---\s*\n/m
         self.content = self.content[($1.size + 5)..-1]
         self.data = self.data.merge YAML.load($1)
       end
     end
-    
+
     def check_markdown_header
-      if self.content =~ /(.*)\n===*\n/
+      if self.content =~ /(.*)\r?\n===*\r?\n/
         self.data['title'] = $1
       end
     end
@@ -38,17 +38,17 @@ module Jekyll
         self.content = Jekyll.markdown_proc.call(self.content)
       end
     end
-    
+
     def determine_content_type
       case self.ext[1..-1]
       when /textile/i
         return :textile
       when /markdown/i, /mkdn/i, /md/i, /md.txt/i
         return :markdown
-      end      
+      end
       return :unknown
     end
-    
+
     # Add any necessary layouts to this convertible document
     #   +layouts+ is a Hash of {"name" => "layout"}
     #   +site_payload+ is the site payload hash
@@ -59,16 +59,16 @@ module Jekyll
       Jekyll.content_type = self.determine_content_type
       self.content = Liquid::Template.parse(self.content).render(payload, [Jekyll::Filters])
       self.transform
-      
+
       # output keeps track of what will finally be written
       self.output = self.content
-      
+
       # recursively render layouts
       layout = layouts[self.data["layout"]]
       while layout
         payload = payload.deep_merge({"content" => self.output, "page" => layout.data})
         self.output = Liquid::Template.parse(layout.content).render(payload, [Jekyll::Filters])
-        
+
         layout = layouts[layout.data["layout"]]
       end
     end
